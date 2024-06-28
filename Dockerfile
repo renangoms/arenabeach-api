@@ -4,7 +4,7 @@ WORKDIR /usr/app
 
 RUN npm i -g @nestjs/cli
 
-COPY package*.json pnpm-lock.yaml ./
+COPY package*.json pnpm-lock.yaml yarn.lock ./
 COPY tsconfig.json ./
 COPY ./prisma ./prisma
 
@@ -15,4 +15,4 @@ COPY . .
 RUN npm run build
 
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:dev"]
