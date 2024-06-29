@@ -30,6 +30,7 @@ export class BookingsController {
   @IsPublic()
   @Get('/date')
   findOne(@Query('searchDate') searchDate: string) {
+    console.log(searchDate + 'controller');
     return this.bookingsService.findByDate(new Date(searchDate));
   }
 
