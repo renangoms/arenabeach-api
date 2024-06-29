@@ -14,7 +14,10 @@ export class BookingsController {
   findOne(
     @Param('searchDate') searchDate: string) 
   {
-    return this.bookingsService.findByDate(new Date(searchDate));
+    const dateString = searchDate + 'T00:00:00.000Z';
+    const data = new Date(dateString);
+
+    return this.bookingsService.findByDate(data);
   }
   
   @Post()
