@@ -10,8 +10,10 @@ export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
   
   @IsPublic()
-  @Get('/date')
-  findOne(@Query('searchDate') searchDate: string) {
+  @Get('/date/:searchDate')
+  findOne(
+    @Param('searchDate') searchDate: string) 
+  {
     console.log(searchDate + 'controller');
     return this.bookingsService.findByDate(new Date(searchDate));
   }
