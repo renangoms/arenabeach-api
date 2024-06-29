@@ -6,11 +6,12 @@ RUN npm i -g @nestjs/cli
 
 COPY package*.json pnpm-lock.yaml yarn.lock ./
 COPY tsconfig.json ./
-COPY ./prisma ./prisma
 
 RUN npm install
 
 COPY . .
 
 EXPOSE 3000
+
+RUN npx prisma generate
 CMD ["npm", "run", "start"]
