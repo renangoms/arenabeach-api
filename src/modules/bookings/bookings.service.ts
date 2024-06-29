@@ -102,7 +102,7 @@ export class BookingsService {
         chargeBody,
         {
           headers: {
-            Authorization: 'Q2xpZW50X0lkXzQzZGQ4NWRiLTZmMTQtNGRiNy1iYzhiLTQwOGJlNWU3NDNjZDpDbGllbnRfU2VjcmV0X0RYVDVNVWpuMUQ3WUVFKzV2TnZLUlZaY0RwS1B2anJzM0JicEtlakc3R1k9'
+            Authorization: env.paymentAuthToken
           }
         }
       );
@@ -145,7 +145,7 @@ export class BookingsService {
       `https://api.openpix.com.br/api/v1/charge/${correlationID}`,
       {
         headers: {
-          Authorization: 'Q2xpZW50X0lkXzQzZGQ4NWRiLTZmMTQtNGRiNy1iYzhiLTQwOGJlNWU3NDNjZDpDbGllbnRfU2VjcmV0X0RYVDVNVWpuMUQ3WUVFKzV2TnZLUlZaY0RwS1B2anJzM0JicEtlakc3R1k9'
+          Authorization: env.paymentAuthToken
         }
       }
     );
