@@ -1,6 +1,5 @@
 export function ReturnDayOfWeek(date: Date) {
-    console.log(date.getDay() + ' ' + date);
-    const day = date.getDay() + 1;
+    const day = date.getDay();
 
     switch (day) {
         case 0:
