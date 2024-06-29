@@ -8,7 +8,14 @@ import { IsPublic } from 'src/shared/decorators/IsPublic';
 @Controller('bookings')
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
-
+  
+  @IsPublic()
+  @Get('/date')
+  findOne(@Query('searchDate') searchDate: string) {
+    console.log(searchDate + 'controller');
+    return this.bookingsService.findByDate(new Date(searchDate));
+  }
+  
   @Post()
   create(@Body() createBookingDto: CreateBookingDto, @ActiveUserId() userId: string) {
     return this.bookingsService.create(createBookingDto, userId);
@@ -18,20 +25,12 @@ export class BookingsController {
   findAll() {
     return this.bookingsService.findAll();
   }
-
   @Get('/payment/:id')
   verifyPayment(
     @Param('id') id: string,
     @ActiveUserId() userId: string,
 ) {
     return this.bookingsService.verifyPayment(id, userId);
-  }
-
-  @IsPublic()
-  @Get('/date')
-  findOne(@Query('searchDate') searchDate: string) {
-    console.log(searchDate + 'controller');
-    return this.bookingsService.findByDate(new Date(searchDate));
   }
 
   @Patch(':id')
