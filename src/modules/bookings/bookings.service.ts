@@ -50,6 +50,7 @@ export class BookingsService {
         userEmail,
         userPhone,
         userName,
+        amount
        } = createBookingDto;
 
       const bookingSlotsData = bookingSlots.map(booking => {
@@ -83,7 +84,7 @@ export class BookingsService {
           email: userEmail,
           phone: userPhone,
         },
-        value: 10,
+        value: amount,
         type: 'DYNAMIC',
         comment: 'Cobrança referente a reserva',
         expiresIn: Number(env.chargeExpiresIn) ?? 300,
@@ -108,7 +109,7 @@ export class BookingsService {
 
       await this.paymentsRepo.create({
         data: {
-          amount: 10,
+          amount: amount,
           expiresDate: data.charge.expiresDate,
           externalChargeId: data.charge.correlationID,
           bookingId: booking.id,
@@ -119,7 +120,7 @@ export class BookingsService {
 
       return {
         correlationId: data.charge.correlationID,
-        value: 10,
+        value: amount,
         brCode: data.charge.brCode,
         qrCodeImage: data.charge.qrCodeImage,
         expiresDate: data.charge.expiresDate,
