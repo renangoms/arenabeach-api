@@ -135,8 +135,9 @@ export class BookingsService {
     return `This action returns all bookings`;
   }
 
-  findByDate(date: Date) {
-    return this.bookingsRepo.findByDate(date, ReturnDayOfWeek(date));
+  async findByDate(date: Date) {
+    console.log(date + 'service');
+    return await this.bookingsRepo.findByDate(date, ReturnDayOfWeek(date));
   }
 
   async verifyPayment(correlationID: string, userId: string) {
