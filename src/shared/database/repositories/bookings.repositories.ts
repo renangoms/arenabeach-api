@@ -25,8 +25,9 @@ export class BookingsRepository {
       where p.external_charge_id = ${correlationID};`;
   }
 
-  findByDate(date: Date, dayOfWeek: DayOfWeek) {
-    return this.prismaService.$queryRaw(Prisma.sql`
+  async findByDate(date: Date, dayOfWeek: DayOfWeek) {
+    console.log(date, dayOfWeek)
+    return await this.prismaService.$queryRaw(Prisma.sql`
       with calendary as (
         select 
             c.id as "courtId", 
