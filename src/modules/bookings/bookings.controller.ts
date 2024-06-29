@@ -14,7 +14,6 @@ export class BookingsController {
   findOne(
     @Param('searchDate') searchDate: string) 
   {
-    console.log(searchDate + 'controller');
     return this.bookingsService.findByDate(new Date(searchDate));
   }
   
