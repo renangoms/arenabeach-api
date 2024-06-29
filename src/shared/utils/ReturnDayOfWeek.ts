@@ -3,18 +3,18 @@ export function ReturnDayOfWeek(date: Date) {
 
     switch (day) {
         case 0:
-            return 'SUNDAY';
-        case 1:
             return 'MONDAY';
-        case 2:
+        case 1:
             return 'TUESDAY';
-        case 3:
+        case 2:
             return 'WEDNESDAY';
-        case 4:
+        case 3:
             return 'THURSDAY';
-        case 5:
+        case 4:
             return 'FRIDAY';
-        case 6:
+        case 5:
             return 'SATURDAY';
+        case 6:
+            return 'SUNDAY';
     }
 }
