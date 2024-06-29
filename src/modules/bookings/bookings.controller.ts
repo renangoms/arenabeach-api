@@ -17,6 +17,9 @@ export class BookingsController {
     const dateString = searchDate + 'T00:00:00.000Z';
     const data = new Date(dateString);
 
+    console.log('##VAI PESQUISAR');
+    console.log(data);
+
     return this.bookingsService.findByDate(data);
   }
   
