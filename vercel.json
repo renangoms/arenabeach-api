@@ -1,0 +1,31 @@
+{
+    "version": 2,
+    "env": {
+        "DATABASE_URL":"postgresql://supervisor:-9rstz4wNe2zHTRsSDrYEQ@sport-booking-app-14948.7tt.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode:verify-full",
+        "JWT_SECRET":"16234",
+        "CHARGE_EXPIRES_IN":"300",
+        "RESET_PASSWORD_JWT_SECRET":"resetpasswordbookingapp",
+        "FRONTEND_URL":"http://localhost:8080",
+        "EMAIL_USER":"arenabeachone01@gmail.com",
+        "EMAIL_PASSWORD":"brgqzlvrazdregko",
+        "PAYMENT_AUTH_TOKEN":"Q2xpZW50X0lkXzI0NTU3OWMyLTE0NzYtNGVlZi04NGM0LWQxNGZkM2FlMzY2MTpDbGllbnRfU2VjcmV0X3FicDU3TmFGdEhCWEFEQlBkVWhYNEg5UlNjMWhRQnRmcEZFZVpmVE11VGc9"
+    },
+    "builds": [
+        {
+            "src": "src/main.ts",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "src/main.ts",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
+        }
+    ]
+}
