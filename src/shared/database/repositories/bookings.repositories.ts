@@ -70,7 +70,7 @@ export class BookingsRepository {
                 from bookings b
                 inner join booking_slots bs on bs.booking_id = b.id and bs.schedule_id = s.id and bs.booking_date = ${date}
                 inner join payments p on p.booking_id = b.id
-                where b.court_id = c.id and (b.status = 'CONFIRMED' or (p.expires_date > current_timestamp AT TIME ZONE 'UTC' and b.status != 'PENDING'))
+                where b.court_id = c.id and (b.status = 'CONFIRMED' or (p.expires_date > current_timestamp AT TIME ZONE 'UTC' and b.status = 'PENDING'))
             ) as reservado
         from schedules s 
         cross join courts c 
@@ -102,7 +102,7 @@ export class BookingsRepository {
                 from bookings b
                 inner join booking_slots bs on bs.booking_id = b.id and bs.schedule_id = s.id and bs.booking_date = ${findUniqueDto.date}
                 inner join payments p on p.booking_id = b.id
-                where b.court_id = c.id and (b.status = 'CONFIRMED' or (p.expires_date > current_timestamp AT TIME ZONE 'UTC' and b.status != 'PENDING'))
+                where b.court_id = c.id and (b.status = 'CONFIRMED' or (p.expires_date > current_timestamp AT TIME ZONE 'UTC' and b.status = 'PENDING'))
             ) as reservado
         from schedules s 
         cross join courts c 
