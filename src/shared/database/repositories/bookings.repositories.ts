@@ -20,7 +20,30 @@ export class BookingsRepository {
   }
 
   findMany(findManyDto: Prisma.BookingFindManyArgs) {
-    return this.prismaService.booking.findMany(findManyDto)
+    return this.prismaService.$queryRaw(Prisma.sql`
+      select 
+        b.id,
+        (p.amount / 100) as amount,
+        case 
+          when b.status = 'PENDING' and p.expires_date > current_timestamp AT TIME ZONE 'UTC' 
+            then 'PENDING'
+          when b.status = 'PENDING' and p.expires_date < current_timestamp AT TIME ZONE 'UTC' 
+            then 'EXPIRED'
+          when b.status = 'CANCELED' then 'CANCELED'
+          when b.status = 'CONFIRMED' then 'CONFIRMED'
+        end as status,
+        b.created_at,
+        u.name,
+        u.phone,
+        u.email
+        
+      from bookings b 
+      inner join users u 
+        on u.id = b.user_id
+      inner join payments p 
+        on p.booking_id = b.id
+      order by b.created_at desc
+    `, []);
   }
 
   findByCorrelationId(correlationID: string): Promise<{id:string; startTime: number; endTime: number}[]> {
@@ -99,6 +122,10 @@ export class BookingsRepository {
       order by "startTime", "courtId"
 
     `, []);
+  }
+
+  findOne(findUniqueDto: Prisma.BookingFindUniqueArgs) {
+    return this.prismaService.booking.findUnique(findUniqueDto);
   }
 
   update(updateDto: Prisma.BookingUpdateArgs) {
