@@ -28,6 +28,16 @@ export class BookingsController {
     return this.bookingsService.create(createBookingDto, userId);
   }
 
+  @Post('/manually')
+    createManually(@Body() createBookingDto: CreateBookingDto, @ActiveUserId() userId: string) {
+    return this.bookingsService.createManually(createBookingDto, userId);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() body: {status: 'PENDING' | 'CONFIRMED' | 'CANCELED'}) {
+    return this.bookingsService.update(id, body.status);
+  }
+
   @Get()
   findAll() {
     return this.bookingsService.findAll();
