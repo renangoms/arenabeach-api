@@ -63,7 +63,7 @@ export class BookingsService {
           });
 
           console.log(isReserved);
-          if (!!isReserved) {
+          if (!isReserved) {
             throw new ConflictException();
           }
       
