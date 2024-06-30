@@ -10,6 +10,7 @@ import { MailService } from '../mail/mail.service';
 import { UsersRepository } from 'src/shared/database/repositories/users.repositories';
 import { PaymentsRepository } from 'src/shared/database/repositories/payments.repositories';
 import { convertSecondsToHHMM } from 'src/shared/utils/convertSecondsToHour';
+import { TransformDate } from 'src/shared/utils/transformDate';
 
 interface ChargeReturn {
   charge: {
@@ -55,7 +56,7 @@ export class BookingsService {
         bookingSlots.map(async booking => {
           const isReserved = await this.bookingsRepo.findUnique({
             courtId: courtId,
-            date: booking.bookingDate,
+            date: TransformDate(booking.bookingDate),
             startTime: booking.startTime,
             endTime: booking.endTime,
             scheduleId: booking.scheduleId,
