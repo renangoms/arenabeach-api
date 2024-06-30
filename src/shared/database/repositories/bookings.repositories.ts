@@ -19,7 +19,7 @@ export class BookingsRepository {
     return this.prismaService.booking.create(createDto);
   }
 
-  findMany(findManyDto: Prisma.BookingFindManyArgs) {
+  findMany() {
     return this.prismaService.$queryRaw(Prisma.sql`
       select 
         b.id,
@@ -117,7 +117,7 @@ export class BookingsRepository {
         "startTime",
         "endTime",
         "reservado"
-      from calendary  
+      from calendary 
       where "reservado" = true
       order by "startTime", "courtId"
 
