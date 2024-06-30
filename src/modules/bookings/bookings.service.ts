@@ -62,7 +62,8 @@ export class BookingsService {
             scheduleId: booking.scheduleId,
           });
 
-          if (isReserved) {
+          console.log(isReserved);
+          if (!!isReserved) {
             throw new ConflictException();
           }
       
