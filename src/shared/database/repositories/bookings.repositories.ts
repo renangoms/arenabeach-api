@@ -3,6 +3,14 @@ import { DayOfWeek, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
 
+interface FindUniqueDtoArgs {
+  date: string;
+  scheduleId: string;
+  startTime: number;
+  endTime: number;
+  courtId: string;
+}
+
 @Injectable()
 export class BookingsRepository {
   constructor(private readonly prismaService: PrismaService) {}
@@ -26,7 +34,6 @@ export class BookingsRepository {
   }
 
   async findByDate(date: Date, dayOfWeek: DayOfWeek) {
-    console.log(date, dayOfWeek)
     return await this.prismaService.$queryRaw(Prisma.sql`
       with calendary as (
         select 
@@ -45,6 +52,41 @@ export class BookingsRepository {
         from schedules s 
         cross join courts c 
         where s."day_of_week" = ${dayOfWeek}
+      )
+      select 
+        "scheduleId",
+        "courtId",
+        "startTime",
+        "endTime",
+        "reservado"
+      from calendary 
+      order by "startTime", "courtId"
+
+    `, []);
+  }
+
+  findUnique(findUniqueDto: FindUniqueDtoArgs) {
+    return this.prismaService.$queryRaw(Prisma.sql`
+      with calendary as (
+        select 
+            c.id as "courtId", 
+            s.id as "scheduleId",
+            s."day_of_week", 
+            s.start_time as "startTime",
+            s.end_time as "endTime",
+            exists (
+                select 1
+                from bookings b
+                inner join booking_slots bs on bs.booking_id = b.id and bs.schedule_id = s.id and bs.booking_date = ${findUniqueDto.date}
+                inner join payments p on p.booking_id = b.id
+                where b.court_id = c.id and (b.status = 'CONFIRMED' or p.expires_date > current_timestamp AT TIME ZONE 'UTC')
+            ) as reservado
+        from schedules s 
+        cross join courts c 
+        where s.id = ${findUniqueDto.scheduleId}
+        and s.start_time = ${findUniqueDto.startTime}
+        and s.end_time = ${findUniqueDto.endTime}
+        and c.id = ${findUniqueDto.courtId}
       )
       select 
         "scheduleId",
