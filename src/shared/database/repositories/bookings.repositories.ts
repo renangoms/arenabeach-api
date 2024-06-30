@@ -94,7 +94,8 @@ export class BookingsRepository {
         "startTime",
         "endTime",
         "reservado"
-      from calendary 
+      from calendary  
+      where "reservado" = true
       order by "startTime", "courtId"
 
     `, []);
