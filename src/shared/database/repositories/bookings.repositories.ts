@@ -4,7 +4,7 @@ import { DayOfWeek, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
 interface FindUniqueDtoArgs {
-  date: string;
+  date: Date;
   scheduleId: string;
   startTime: number;
   endTime: number;
