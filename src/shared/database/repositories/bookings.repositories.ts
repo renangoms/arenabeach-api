@@ -65,7 +65,7 @@ export class BookingsRepository {
     `, []);
   }
 
-  findUnique(findUniqueDto: FindUniqueDtoArgs) {
+  findUnique(findUniqueDto: FindUniqueDtoArgs): Promise<Array<any>> {
     return this.prismaService.$queryRaw(Prisma.sql`
       with calendary as (
         select 
