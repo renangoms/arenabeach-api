@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { BookingsRepository } from 'src/shared/database/repositories/bookings.repositories';
@@ -42,7 +42,6 @@ export class BookingsService {
   ) {}
 
   async create(createBookingDto: CreateBookingDto, userId: string) {
-    try {
       const { 
         courtId, 
         numberOfRackets, 
@@ -50,17 +49,30 @@ export class BookingsService {
         userEmail,
         userPhone,
         userName,
-        amount
        } = createBookingDto;
 
-      const bookingSlotsData = bookingSlots.map(booking => {
-        return ({
-          bookingDate: new Date(booking.bookingDate),
-          startTime: booking.startTime,
-          endTIme: booking.endTime,
-          scheduleId: booking.scheduleId,
+       const bookingSlotsData = await Promise.all(
+        bookingSlots.map(async booking => {
+          const isReserved = await this.bookingsRepo.findUnique({
+            courtId: courtId,
+            date: booking.bookingDate,
+            startTime: booking.startTime,
+            endTime: booking.endTime,
+            scheduleId: booking.scheduleId,
+          });
+
+          if (isReserved) {
+            throw new ConflictException();
+          }
+      
+          return {
+            bookingDate: new Date(booking.bookingDate),
+            startTime: booking.startTime,
+            endTIme: booking.endTime,
+            scheduleId: booking.scheduleId,
+          };
         })
-      })
+      );
 
       const booking = await this.bookingsRepo.create({
         data: {
@@ -84,7 +96,7 @@ export class BookingsService {
           email: userEmail,
           phone: userPhone,
         },
-        value: amount,
+        value: 10,
         type: 'DYNAMIC',
         comment: 'Cobrança referente a reserva',
         expiresIn: Number(env.chargeExpiresIn) ?? 300,
@@ -109,7 +121,7 @@ export class BookingsService {
 
       await this.paymentsRepo.create({
         data: {
-          amount: amount,
+          amount: 10,
           expiresDate: data.charge.expiresDate,
           externalChargeId: data.charge.correlationID,
           bookingId: booking.id,
@@ -120,15 +132,12 @@ export class BookingsService {
 
       return {
         correlationId: data.charge.correlationID,
-        value: amount,
+        value: 10,
         brCode: data.charge.brCode,
         qrCodeImage: data.charge.qrCodeImage,
         expiresDate: data.charge.expiresDate,
         expiresIn: data.charge.expiresIn
       };
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   findAll() {
@@ -136,7 +145,6 @@ export class BookingsService {
   }
 
   async findByDate(date: Date) {
-    console.log(date + 'service');
     return await this.bookingsRepo.findByDate(date, ReturnDayOfWeek(date));
   }
 
