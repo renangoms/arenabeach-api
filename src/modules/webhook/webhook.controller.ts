@@ -9,8 +9,6 @@ export class WebhookController {
   @IsPublic()
   @Post('pix-webhook')
   webhook(@Body() data: any) {
-    console.log(data);
-
     if (data.pix) {
       const userEmail = data.pix.charge.customer.email;
       const event = 'webhook';
