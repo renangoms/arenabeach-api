@@ -8,13 +8,30 @@ export class WebhookController {
 
   @IsPublic()
   @Post('pix-webhook')
-  webhook(@Body() data: any) {
+  async webhook(@Body() data: any) {
+    console.log('## Pagou');
+    console.log(data);
     if (data.pix) {
+      const paymentRef = await this.paymentsRepo.findFirst({
+        where: {
+          externalChargeId: data.pix.charge.correlationID
+        }
+      });
+
+      await this.bookingsRepo.update({
+        where: {
+          id: paymentRef.bookingId,
+        },
+        data: {
+          status: 'CONFIRMED'
+        }
+      });
+
       const userEmail = data.pix.charge.customer.email;
       const event = 'webhook';
       this.webhookGateway.broadcast(event, data, userEmail);
     }
 
-    return { Ok: true };
+    return { ok: true };
   }
 }
