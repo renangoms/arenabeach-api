@@ -10,4 +10,8 @@ export class PaymentsRepository {
   create(createDto: Prisma.PaymentCreateArgs) {
     return this.prismaService.payment.create(createDto);
   }
+
+  findFirst(findFirstDto: Prisma.PaymentFindFirstArgs) {
+    return this.prismaService.payment.findFirst(findFirstDto);
+  }
 }
