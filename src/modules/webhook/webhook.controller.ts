@@ -1,10 +1,16 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { WebhookGateway } from './webhook.gateway';
 import { IsPublic } from 'src/shared/decorators/IsPublic';
+import { BookingsRepository } from 'src/shared/database/repositories/bookings.repositories';
+import { PaymentsRepository } from 'src/shared/database/repositories/payments.repositories';
 
 @Controller()
 export class WebhookController {
-  constructor(private readonly webhookGateway: WebhookGateway) {}
+  constructor(
+    private readonly webhookGateway: WebhookGateway,
+    private readonly bookingsRepo: BookingsRepository,
+    private readonly paymentsRepo: PaymentsRepository,
+  ) {}
 
   @IsPublic()
   @Post('pix-webhook')
@@ -16,7 +22,7 @@ export class WebhookController {
         where: {
           externalChargeId: data.pix.charge.correlationID
         }
-      });
+      })
 
       await this.bookingsRepo.update({
         where: {
@@ -32,6 +38,6 @@ export class WebhookController {
       this.webhookGateway.broadcast(event, data, userEmail);
     }
 
-    return { ok: true };
+    return { Ok: true };
   }
 }
