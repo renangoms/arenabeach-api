@@ -11,4 +11,5 @@ export class CreateBookingDto {
     userName: string;
     userEmail: string;
     userPhone: string;
+    customerName?: string;
 }

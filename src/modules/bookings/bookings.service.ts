@@ -236,6 +236,7 @@ export class BookingsService {
       userPhone,
       userName,
       amount,
+      customerName
      } = createBookingDto;
 
      const bookingSlotsData = await Promise.all(
@@ -267,6 +268,7 @@ export class BookingsService {
         status: 'CONFIRMED',
         numberOfRackets,
         userId: userId,
+        customerName: customerName ?? userName,
         bookingSlots: {
           createMany: {
             data: bookingSlotsData
