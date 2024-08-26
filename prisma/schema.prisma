@@ -64,8 +64,9 @@ enum BookingStatus {
 
 model Booking {
   id               String        @id @default(uuid()) @db.Uuid
-  userId           String        @map("user_id") @db.Uuid
+  userId           String?        @map("user_id") @db.Uuid 
   courtId          String        @map("court_id") @db.Uuid
+  customerName     String?        @map("customer_name") 
   extraEquipmentId String?        @map("extra_equipment_id") @db.Uuid
   status           BookingStatus
   createdAt        DateTime      @default(now()) @map("created_at")
@@ -74,7 +75,7 @@ model Booking {
   bookingSlots     BookingSlot[]
   payments         Payment[]
 
-  user           User           @relation(fields: [userId], references: [id])
+  user           User?           @relation(fields: [userId], references: [id])
   court          Court          @relation(fields: [courtId], references: [id])
   extraEquipment ExtraEquipment? @relation(fields: [extraEquipmentId], references: [id])
 
