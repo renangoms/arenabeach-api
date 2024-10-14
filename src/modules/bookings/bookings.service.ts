@@ -82,6 +82,7 @@ export class BookingsService {
           status: 'PENDING',
           numberOfRackets,
           userId: userId,
+          customerName: userName,
           bookingSlots: {
             createMany: {
               data: bookingSlotsData
