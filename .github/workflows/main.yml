@@ -32,4 +32,4 @@ jobs:
           remote_path: /var/www/api/
           remote_host: 68.183.29.108
           remote_user: root
-          remote_key: ""
+          remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"
